@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://gmpg.org/xfn/11">
+<meta name="google-site-verification" content="koQYOEHZ25us1fYI-5x6OJINod9uzx3L2JKcXWRS6BY" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="Imagesk is a free image hosting, sharing website. No registration, public galleries, or ads. Upload your images and let us host them for you. Share your images privately." />
+
+<title>Free image hosting, image upload, image sharing &raquo; imagesk.com</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.1/build/reset-fonts-grids/reset-fonts-grids.css">
+
+<style type='text/css'>
+body {
+  color: #373737;
+}
+a {
+  color: #0047FF;
+  text-decoration: none;
+}
+a:hover {
+  color: #0D1AC6;
+  text-decoration: underline;
+}
+#doc {
+  text-align: center;
+}
+#hd {
+  padding-top: 70px;
+  padding-bottom: 30px;
+}
+#ft {
+  padding-top: 50px;
+}
+#img {
+  margin-top: 20px;
+}
+#copyarea {
+  padding: 3px 5px;
+  width: 300px;
+}
+#error {
+  margin: 10px auto;
+  background: yellow;
+  width: 300px;
+  padding: 5px;
+}
+#tag {
+  font-size: 36px;
+  font-weight: bold;
+  font-style: italic;
+  font-family: Georgia;
+  color: gray;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+  <div id="doc3" style="text-align: center">
+    <div id="hd">
+      <a href="/" title="imagesk"><img src="/assets/imagesk.gif" alt="imagesk" /></a>
+      {% if image %}
+        <p><a href="/" title="Upload another image">Upload Another Image</a></p>
+      {% else %}
+        <div id="tag">Upload. Share. Privately.</div>
+      {% endif %}
+    </div>
+    <div id="bd">
+        {% if image %}
+          <p><input id="copyarea" type="text" value="http://imagesk.com/{{image}}" /></p>
+          <img id="img" src="/{{image}}" alt="copy the url above to share this image" />
+        {% else %}
+          {% if error %}
+          <div id="error">
+              {% ifequal error "file_type" %}
+              This is not an image file.<br />
+              Get your eyes checked?<br />
+              GIF, JPG, JPEG, and PNG only!<br />
+              {% endifequal %}
+              {% ifequal error "too_big" %}
+              This file is too big!<br />
+              What are you trying to do?<br />
+              Upload the whole internet?<br />
+              2MB max.
+              {% endifequal %}
+              {% ifequal error "not_found" %}
+              I don't know any file by that name.<br />
+              Try again?
+              {% endifequal %}
+              {% ifequal error "duplicate" %}
+              Holy crap, how did you do that?<br />
+              You broke the site. Jerk!
+              {% endifequal %}
+          </div>
+          {% endif %}
+          <form name="imageform" method="post" enctype="multipart/form-data"  action="{{ upload_url }}">
+            <input type="hidden" name="MAX_FILE_SIZE" value="2097152" />
+            <input type="file" name="file" size="35">
+            <input name="Submit" type="submit" value="Upload">
+          </form>
+        {% endif %}
+    </div>
+    <!--div id="ft">
+      <a href="/about" title="About">About</a> -
+      <a href="/faq" title="FAQ">FAQ</a> -
+      <a href="/delete" title="Request Deletion">Request Deletion</a> -
+      <a href="/rules" title="Rules">Rules</a>
+    </div-->
+    <div style="margin: 100px auto 20px auto; width: 400px; padding: 5px; border: 1px solid #333;">Please do not upload any illegal stuff. Keep it clean.</div>
+  </div>
+  
+  <script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+  try {
+  var pageTracker = _gat._getTracker("UA-807594-15");
+  pageTracker._trackPageview();
+  } catch(err) {}</script>
+  
+</body>
+</html>

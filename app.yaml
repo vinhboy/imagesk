@@ -1,0 +1,13 @@
+application: imageskcom
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+  - url: /assets
+    static_dir: assets
+  - url: /favicon.ico
+    static_files: favicon.ico
+    upload: favicon.ico
+  - url: /.*
+    script: index.py
