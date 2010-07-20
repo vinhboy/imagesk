@@ -3,6 +3,7 @@ import os
 import urllib
 import string
 import re
+import logging
 
 from random import Random
 from google.appengine.api import users
@@ -39,6 +40,7 @@ class MainPage(webapp.RequestHandler):
         if self.request.get('i'):
           image = Image.gql("WHERE filename = :1",self.request.get('i')).get()
           if image:
+            # captures IP address on initial load
             if image.ip == None:
               image.ip = self.request.remote_addr
               image.put()
@@ -54,8 +56,14 @@ class MainPage(webapp.RequestHandler):
             'image': self.request.get('i')
         }
 
-        path = os.path.join(os.path.dirname(__file__), 'index.html')
-        self.response.out.write(template.render(path, template_values))
+        if self.request.get('upload_url'):
+          self.response.out.write(upload_url)
+        else:
+          if (self.request.get('image_url')):
+            self.response.out.write('http://imagesk.com/'+self.request.get('i'))
+          else:
+            path = os.path.join(os.path.dirname(__file__), 'index.html')
+            self.response.out.write(template.render(path, template_values))
 
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
@@ -91,9 +99,12 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
           else:
             image.put()
             url = '?i=' + image.filename
+            if (self.request.get('image_url')):
+              url += '&image_url=true'
+            
         else:
-          url = '?error=file_type'
-          
+          url = '?error=crap'
+        
         self.redirect('/' + url)
 
 class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
@@ -121,9 +132,9 @@ class Guestbook(webapp.RequestHandler):
 application = webapp.WSGIApplication(
                                      [('/', MainPage),
                                       ('/upload', UploadHandler),
-                                      ('/([^/]+.(?:jpg|jpeg|bmp|tiff|gif|png)$)?', ServeHandler),
+                                      ('/([a-zA-Z0-9_-]+\.(?:jpg|jpeg|bmp|tiff|gif|png)$)?', ServeHandler),
                                       ('/sign', Guestbook)],
-                                     debug=False)
+                                     debug=True)
 
 def main():
     run_wsgi_app(application)
