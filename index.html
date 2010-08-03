@@ -25,8 +25,10 @@ a:hover {
   text-align: center;
 }
 #hd {
-  padding-top: 40px;
+  padding-top: 20px;
   padding-bottom: 10px;
+  width: 960px;
+  margin: auto;
 }
 #ft {
   padding-top: 50px;
@@ -56,18 +58,25 @@ a:hover {
 </head>
 <body>
   <div id="doc3" style="text-align: center">
-    <div id="hd">
-      <a href="/" title="imagesk"><img src="/assets/imagesk.png" alt="imagesk" /></a>
-    </div>
+    <table id="hd">
+      <tr>
+        <td style="padding: 20px 0;"><a href="/" title="imagesk"><img src="/assets/imagesk.png" alt="imagesk" /></a></td>
+        <td>
+          {% if image %}
+            <p>
+              Copy and share this URL:<br />
+              <input id="copyarea" type="text" value="http://imagesk.com/{{image}}" /><br />
+              {% if image %}
+                <a href="/" title="Upload another image">Upload another image</a>
+              {% endif %}
+            </p>
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+    <hr />
     <div id="bd">
         {% if image %}
-          <p>
-            Copy and share this URL:<br />
-            <input id="copyarea" type="text" value="http://imagesk.com/{{image}}" /><br />
-            {% if image %}
-              <a href="/" title="Upload another image">Upload another image</a>
-            {% endif %}
-          </p>
           <img id="img" src="/{{image}}" alt="copy the url above to share this image" />
         {% else %}
           {% if error %}

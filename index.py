@@ -76,7 +76,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
           image.blob_key = blob_info
         
           file_name = ''.join(Random().sample(string.letters+string.digits,8))
-          file_extension = re.search('^image/(jpeg|jpg|gif|png|tiff|bmp)$',blob_info.content_type)
+          file_extension = re.search('^image/(jpeg|jpg|pjpeg|gif|png|tiff|bmp)$',blob_info.content_type)
         
           url = ''
         
@@ -85,6 +85,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
           
           if file_extension:
             file_extension = file_extension.group(1)
+            file_extension = file_extension.replace('pjpeg','jpg')
             file_extension = file_extension.replace('jpeg','jpg')
             image.filename = file_name+'.'+file_extension
           else:
@@ -112,7 +113,6 @@ class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
         filename = str(urllib.unquote(resource))
         image = Image.gql("WHERE filename = :1",filename).get()
         
-        #self.response.out.write(images[0].blob_key.size)
         if image:
           self.send_blob(image.blob_key)
         else:
@@ -132,9 +132,9 @@ class Guestbook(webapp.RequestHandler):
 application = webapp.WSGIApplication(
                                      [('/', MainPage),
                                       ('/upload', UploadHandler),
-                                      ('/([a-zA-Z0-9_-]+\.(?:jpg|jpeg|bmp|tiff|gif|png)$)?', ServeHandler),
+                                      ('/([a-zA-Z0-9_-]+\.(?:jpg|jpeg|pjpeg|bmp|tiff|gif|png)$)?', ServeHandler),
                                       ('/sign', Guestbook)],
-                                     debug=True)
+                                     debug=False)
 
 def main():
     run_wsgi_app(application)
